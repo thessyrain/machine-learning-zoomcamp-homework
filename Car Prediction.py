@@ -151,4 +151,141 @@ print(np.log1p (260405.72118870862)) #log1p of the prediction
 
 
 #Linear Regression  of vector form
+def dot (xi, w):
+    n = len(xi)
+    result = 0.0
+    for j in range(n):
+        result += xi[j] * w[j]
+    return result
+print(dot(xi, w))
 
+def linear_regression(xi):
+    return w0 + dot(xi, w)
+print(linear_regression(xi))
+
+#Short Notation
+w_new = [w0] + w
+print(w_new)
+
+def linear_regression(xi):
+    x1 = [1] + xi
+    return dot(x1, w_new)
+print(linear_regression(xi))
+
+#Making predictions for multiple cars
+xi = [185, 17, 1385]
+w0 = 7.17
+w = [0.01, 0.04, 0.002]
+
+x1 = [1, 148, 24, 1385]
+x2 = [1, 132, 25, 2031]
+x10= [1, 453, 11, 853]
+
+X = [x1, x2, x10]
+X = np.array(X)
+print(X)
+
+def linear_regression(X):
+    return X.dot(w_new)
+print(linear_regression(X))
+
+
+#Training a linear regression model
+def train_linear_regression(X, y):
+    pass
+
+X = [
+    [148, 54, 1385],
+    [132, 55, 2031],
+    [453, 11, 853],
+    [132, 25, 2031],
+    [453, 71, 853],
+    [53, 18, 853],
+    [32, 25, 2031],
+    [22, 11, 853],
+    [57, 32, 853],
+]
+
+X = np.array(X)
+print(X)
+
+#Gram matrix
+ones = np.ones(X.shape[0])
+print(ones)
+
+X = np.column_stack([ones, X])
+print(X)
+
+y = [7.4, 7.12, 6.80, 7.12, 6.80, 7.50, 7.25, 7.60, 7.45]
+XTX = X.T.dot(X)
+print(XTX)
+XTX_inv = np.linalg.inv(XTX)
+XTX.dot(XTX_inv).round(1)
+print(XTX.dot(XTX_inv).round(1))
+
+w_full = XTX_inv.dot(X.T).dot(y)
+print(w_full)
+
+w0 = w_full[0]
+w = w_full[1:]
+print(w0, w)
+
+"""
+def train_linear_regression(X, y):
+       Train linear regression using the normal equation.
+
+        This implementation is robust to a singular X^T X matrix. It first
+        attempts to compute the inverse; if that fails because the matrix is
+        singular, it falls back to the Moore-Penrose pseudo-inverse.
+
+        Inputs:
+            - X: 2D numpy array of shape (n_samples, n_features)
+            - y: 1D array-like of length n_samples
+
+        Returns:
+            - w0: intercept (float)
+            - w: 1D numpy array of feature weights
+      
+        ones = np.ones(X.shape[0])
+        X = np.column_stack([ones, X])
+
+        XTX = X.T.dot(X)
+        try:
+                XTX_inv = np.linalg.inv(XTX)
+        except np.linalg.LinAlgError:
+                # XTX is singular (not invertible). Use pseudo-inverse instead.
+                XTX_inv = np.linalg.pinv(XTX)
+
+        w_full = XTX_inv.dot(X.T).dot(y)
+
+        return w_full[0], w_full[1:]
+print(train_linear_regression(X, y))
+
+"""
+
+
+
+#Car Price Baseline Model, this is just a placeholder for further model development
+
+df_train.dtypes #Check the data types of the training dataframe
+print(df_train.dtypes)
+
+df_train.columns
+print(df_train.columns)
+
+base = ['engine_hp', 'engine_cylinders', 'highway_mpg', 'city_mpg', 'popularity']
+
+X_train = df_train[base].values
+df_train = df_train[base].fillna(0).values       #Handling missing values by filling them with 0
+print(df_train)
+
+train_linear_regression(X_train, y_train)
+
+"""
+y_pred = w0 + X_train.dot(w) #Making predictions on the training set
+print(y_pred)
+
+sns.histplot(y_pred)
+sns.histplot(y_train)
+plt.show()
+"""
